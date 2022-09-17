@@ -13,6 +13,7 @@ class LoginView : UIView {
     let stackView = UIStackView()
     let userNameTextField = UITextField()
     let passwordTextField = UITextField()
+    let dividerView = UIView()
     
     override init(frame : CGRect){
         super.init(frame : frame)
@@ -36,7 +37,7 @@ class LoginView : UIView {
 extension LoginView {
     func style() {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .orange
+        backgroundColor = .secondarySystemBackground
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -52,10 +53,13 @@ extension LoginView {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
         
+        dividerView.translatesAutoresizingMaskIntoConstraints = false
+        dividerView.backgroundColor = .secondarySystemFill
     }
     
     func layout() {
         stackView.addArrangedSubview(userNameTextField)
+        stackView.addArrangedSubview(dividerView)
         stackView.addArrangedSubview(passwordTextField)
         addSubview(stackView)
         
@@ -65,6 +69,10 @@ extension LoginView {
             trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
             bottomAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 1)
         ])
+        //.activate basically calls isActive for all the above constraints mentioned.
+        
+        //don't need the trailing and leading for the divider as the autolayout will stretch the view for us, so just need to specify the height.
+        dividerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
     
 }
