@@ -15,6 +15,14 @@ class LoginViewController: UIViewController {
     let signInButton = UIButton(type: .system)
     let errorMessageLabel = UILabel()
     
+    var username : String? {
+        return loginView.userNameTextField.text
+    }
+    
+    var password : String? {
+        return loginView.passwordTextField.text
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         style()
@@ -31,7 +39,7 @@ extension LoginViewController {
         
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.configuration = .filled()
-        signInButton.configuration?.imagePadding = 8 // for indicator spacing
+        signInButton.configuration?.imagePadding = 8 // for activityIndicator spacing
         signInButton.setTitle("Sign In", for: [])
         signInButton.addTarget(self, action: #selector(signInTapped), for: .primaryActionTriggered)
         
@@ -40,7 +48,7 @@ extension LoginViewController {
         errorMessageLabel.textColor = .systemRed
         errorMessageLabel.numberOfLines = 0
         errorMessageLabel.text = "Sign in failure"
-        errorMessageLabel.isHidden = false
+        errorMessageLabel.isHidden = true
     }
     
     private func layout() {
@@ -80,7 +88,32 @@ extension LoginViewController {
 
 extension LoginViewController {
     @objc func signInTapped() {
+        errorMessageLabel.isHidden = true
+        login()
+    }
+    
+    private func login() {
+        guard let username = username, let password = password else {
+            assertionFailure("username or password shouldnever be blank")
+            return
+        }
         
+        if username.isEmpty || password.isEmpty {
+            configureView(withMessage : "username / password cannot be blank")
+            return
+        }
+        
+        if username == "Pritam" && password == "Welcome"{
+            signInButton.configuration?.showsActivityIndicator = true
+        }else{
+            configureView(withMessage: "Incorrect username or password")
+        }
+    }
+    
+    //withMessage : argument label
+    private func configureView(withMessage message: String){
+        errorMessageLabel.isHidden = false
+        errorMessageLabel.text = message
     }
     
 }
