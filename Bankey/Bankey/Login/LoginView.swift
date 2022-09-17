@@ -9,7 +9,10 @@ import Foundation
 import UIKit
 
 class LoginView : UIView {
+    
+    let stackView = UIStackView()
     let userNameTextField = UITextField()
+    let passwordTextField = UITextField()
     
     override init(frame : CGRect){
         super.init(frame : frame)
@@ -22,10 +25,12 @@ class LoginView : UIView {
         fatalError("init(coder: ) has not been implemented")
     }
     
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width : 200, height : 200)
-    }
+//    override var intrinsicContentSize: CGSize {
+//        return CGSize(width : 200, height : 200)
+//    }
     //This  helps with brand new view to size itself and if it is ever put into a stack view this view will know roughly how to size itself.
+    //intrinsic size is the default size of a element that wants to size itself in autolayout like buttons, labels, etc all of them have intrinsic size.
+    //we had override it earlier to help ourselves if the view did not know to perfectly size itself, now that we are using stack view, we don't need it anymore, so we comment it out.
 }
 
 extension LoginView {
@@ -33,16 +38,32 @@ extension LoginView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .orange
         
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        
+        
         userNameTextField.translatesAutoresizingMaskIntoConstraints = false
         userNameTextField.placeholder = "UserName"
         userNameTextField.delegate = self
+        
+        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        passwordTextField.placeholder = "Password"
+        passwordTextField.isSecureTextEntry = true
+        passwordTextField.delegate = self
+        
     }
     
     func layout() {
+        stackView.addArrangedSubview(userNameTextField)
+        stackView.addArrangedSubview(passwordTextField)
+        addSubview(stackView)
+        
         NSLayoutConstraint.activate([
-            userNameTextField.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
-            userNameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
-            trailingAnchor.constraint(equalToSystemSpacingAfter: userNameTextField.trailingAnchor, multiplier: 1)
+            stackView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 1)
         ])
     }
     
@@ -51,6 +72,9 @@ extension LoginView {
 extension LoginView : UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         userNameTextField.endEditing(true)
+        passwordTextField.endEditing(true)
+        
+        return true
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
