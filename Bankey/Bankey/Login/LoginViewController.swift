@@ -12,8 +12,8 @@ class LoginViewController: UIViewController {
     //Number 1 thing you have to remember when working with custom views and auto layout is to set the translateAutoresizingMaskIntoConstraints = false
     // translateAutoresizingMaskIntoConstraints takes any element or control of a view in your view controller and makes it ready for auto layout.
     let loginView = LoginView()
-
     let signInButton = UIButton(type: .system)
+    let errorMessageLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,11 +34,19 @@ extension LoginViewController {
         signInButton.configuration?.imagePadding = 8 // for indicator spacing
         signInButton.setTitle("Sign In", for: [])
         signInButton.addTarget(self, action: #selector(signInTapped), for: .primaryActionTriggered)
+        
+        errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorMessageLabel.textAlignment = .center
+        errorMessageLabel.textColor = .systemRed
+        errorMessageLabel.numberOfLines = 0
+        errorMessageLabel.text = "Sign in failure"
+        errorMessageLabel.isHidden = false
     }
     
     private func layout() {
         view.addSubview(loginView)
         view.addSubview(signInButton)
+        view.addSubview(errorMessageLabel)
         //Do some autolayout constraints
         
         //This sets isActive to true for all constraints contained within
@@ -57,6 +65,14 @@ extension LoginViewController {
             signInButton.topAnchor.constraint(equalToSystemSpacingBelow: loginView.bottomAnchor, multiplier: 2),
             signInButton.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
             signInButton.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
+        ])
+        
+        //ErrorMessage Label
+
+        NSLayoutConstraint.activate([
+            errorMessageLabel.topAnchor.constraint(equalToSystemSpacingBelow: signInButton.bottomAnchor, multiplier: 1),
+            errorMessageLabel.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor),
+            errorMessageLabel.trailingAnchor.constraint(equalTo: signInButton.trailingAnchor)
         ])
     }
     
